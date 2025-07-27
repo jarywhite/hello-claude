@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "hello": "./bin/hello"
+    "hello": "./bin/hello",
+    "todo": "./bin/todo"
   },
   "scripts": {
     "test": "jest"

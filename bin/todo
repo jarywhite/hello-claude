@@ -1,0 +1,86 @@
+#!/usr/bin/env node
+
+const { add, list, remove } = require('../src/todoList');
+
+function showHelp() {
+  console.log(`
+Usage: todo <command> [arguments]
+
+Commands:
+  add <text>     Add a new todo item
+  list           List all todo items
+  remove <id>    Remove a todo item by ID
+  help           Show this help message
+
+Examples:
+  todo add "Buy groceries"
+  todo list
+  todo remove abc123def
+`);
+}
+
+function formatTodo(todo) {
+  const date = new Date(todo.createdAt).toLocaleDateString();
+  return `[${todo.id}] ${todo.text} (${date})`;
+}
+
+function main() {
+  const args = process.argv.slice(2);
+  
+  if (args.length === 0) {
+    showHelp();
+    return;
+  }
+
+  const command = args[0];
+
+  try {
+    switch (command) {
+      case 'add':
+        if (args.length < 2) {
+          console.error('Error: Please provide text for the todo item');
+          console.log('Usage: todo add <text>');
+          process.exit(1);
+        }
+        const text = args.slice(1).join(' ');
+        const newTodo = add(text);
+        console.log(`Added: ${formatTodo(newTodo)}`);
+        break;
+
+      case 'list':
+        const todos = list();
+        if (todos.length === 0) {
+          console.log('No todos found');
+        } else {
+          console.log(`Found ${todos.length} todo(s):\n`);
+          todos.forEach(todo => console.log(formatTodo(todo)));
+        }
+        break;
+
+      case 'remove':
+        if (args.length < 2) {
+          console.error('Error: Please provide the ID of the todo to remove');
+          console.log('Usage: todo remove <id>');
+          process.exit(1);
+        }
+        const id = args[1];
+        const removedTodo = remove(id);
+        console.log(`Removed: ${formatTodo(removedTodo)}`);
+        break;
+
+      case 'help':
+        showHelp();
+        break;
+
+      default:
+        console.error(`Error: Unknown command "${command}"`);
+        showHelp();
+        process.exit(1);
+    }
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
+  }
+}
+
+main();
