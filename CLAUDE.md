@@ -17,6 +17,23 @@ npm test -- --coverage # Run tests with coverage report
 ./bin/todo <command>    # Todo CLI commands (add/list/remove/help)
 ```
 
+## Custom Slash Commands
+
+This project includes custom Claude Code slash commands:
+
+- `/push-git "<message>"` - Complete git workflow: stage all changes, commit with provided message, and push to current branch
+
+Example usage:
+```
+/push-git "feat: add new feature"
+/push-git "fix: resolve bug in todo list"
+```
+
+The command automatically runs:
+1. `git add -A` - Stage all changes
+2. `git commit -m "<message>"` - Commit with your message  
+3. `git push` - Push to current branch
+
 ## Code Architecture
 
 ### Core Modules
